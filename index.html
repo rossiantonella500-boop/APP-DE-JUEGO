@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#06101b" />
+    <meta name="description" content="NEON PURSUIT — Persecución nocturna en una ciudad cyberpunk. Conduce una superbike, activa el nitro y escapa de la policía." />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="NEON PURSUIT" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" type="image/png" href="./icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <link rel="stylesheet" href="./fonts/fonts.css" />
+    <title>NEON PURSUIT — Night City Runner</title>
+    <script type="module" crossorigin src="./assets/index-CRSoomkd.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/observable.pure-B5E8yEYx.js">
+    <link rel="modulepreload" crossorigin href="./assets/precisionDate-CfCevjl-.js">
+    <link rel="modulepreload" crossorigin href="./assets/logger-CuBYPcDK.js">
+    <link rel="modulepreload" crossorigin href="./assets/timingTools-DFSVnEqk.js">
+    <link rel="modulepreload" crossorigin href="./assets/webRequest-dqz0dHXK.js">
+    <link rel="modulepreload" crossorigin href="./assets/engineStore-e38OvQA7.js">
+    <link rel="modulepreload" crossorigin href="./assets/halfFloat-Ce77JD5z.js">
+    <link rel="modulepreload" crossorigin href="./assets/typeStore-Cu_sj2zM.js">
+    <link rel="modulepreload" crossorigin href="./assets/tools.pure-B7mmLqh1.js">
+    <link rel="modulepreload" crossorigin href="./assets/performanceConfigurator-UtxC_Odd.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.scalar.functions-lnL7TJ7T.js">
+    <link rel="modulepreload" crossorigin href="./assets/math.vector.pure-BI_ulypP.js">
+    <link rel="modulepreload" crossorigin href="./assets/shaderStore-D-XQlhUT.js">
+    <link rel="modulepreload" crossorigin href="./assets/internalTexture--UEgW48C.js">
+    <link rel="modulepreload" crossorigin href="./assets/thinEngine.pure-DK0ffmH-.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-CCNy3E6t.css">
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game-canvas" tabindex="0" aria-label="Vista 3D del videojuego NEON PURSUIT"></canvas>
+      <div id="speedlines" aria-hidden="true"></div>
+      <div id="damage-vignette" aria-hidden="true"></div>
+      <div id="scanlines" aria-hidden="true"></div>
+
+      <div id="loading-screen" class="loading-screen">
+        <div class="load-grid"></div>
+        <div class="load-brand">
+          <div class="load-kicker">NIGHT CITY // BOOT SEQUENCE</div>
+          <div class="load-logo">NEON<span>PURSUIT</span></div>
+          <div class="load-bar"><i id="load-progress"></i></div>
+          <div class="load-status" id="load-status">INICIALIZANDO NÚCLEO GRÁFICO…</div>
+        </div>
+        <div class="load-corner load-corner--tl"></div>
+        <div class="load-corner load-corner--br"></div>
+      </div>
+
+      <div id="ui-root">
+        <!-- ============ MAIN MENU ============ -->
+        <section id="main-menu" class="screen screen--menu is-active" aria-label="Menú principal">
+          <div class="menu-grid" aria-hidden="true"></div>
+          <header class="menu-topbar">
+            <div class="mini-brand"><span class="mini-brand__mark">NP</span> NEON PURSUIT <em>// 2088</em></div>
+            <div class="topbar-right">
+              <span class="system-pill"><i class="dot"></i> SISTEMA EN LÍNEA</span>
+              <span class="backend-pill" id="backend-pill">GL // INIT</span>
+              <button class="icon-btn" id="menu-audio-toggle" aria-label="Activar o silenciar audio" title="Audio">◈</button>
+            </div>
+          </header>
+
+          <div class="menu-content">
+            <div class="menu-hero">
+              <div class="hero-kicker"><span></span> URBAN COMBAT DIVISION — SECTOR 07</div>
+              <h1 class="logo" aria-label="Neon Pursuit">
+                <span class="logo__neon">NEON</span>
+                <span class="logo__pursuit">PURSUIT</span>
+                <i class="logo__slash"></i>
+              </h1>
+              <p class="hero-tagline">CORRE MÁS RÁPIDO QUE LA LEY.<br /><b>NO TE DETENGAS.</b></p>
+
+              <nav class="menu-actions" aria-label="Acciones principales">
+                <button class="btn btn--primary" data-nav="play">
+                  <span class="btn__index">01</span>
+                  <span class="btn__label">JUGAR<small>INICIAR PERSECUCIÓN</small></span>
+                  <span class="btn__arrow">▸</span>
+                </button>
+                <button class="btn" data-nav="garage"><span class="btn__index">02</span><span class="btn__label">GARAGE<small>PERSONALIZAR MOTO</small></span><span class="btn__arrow">▸</span></button>
+                <button class="btn" data-nav="bikes"><span class="btn__index">03</span><span class="btn__label">MOTOCICLETAS<small>MODELOS DISPONIBLES</small></span><span class="btn__arrow">▸</span></button>
+                <button class="btn" data-nav="settings"><span class="btn__index">04</span><span class="btn__label">CONFIGURACIÓN<small>GRÁFICOS Y AUDIO</small></span><span class="btn__arrow">▸</span></button>
+                <button class="btn" data-nav="about"><span class="btn__index">05</span><span class="btn__label">ACERCA DEL JUEGO<small>CRÉDITOS Y CONTROLES</small></span><span class="btn__arrow">▸</span></button>
+              </nav>
+            </div>
+
+            <aside class="menu-aside">
+              <div class="aside-panel">
+                <div class="panel-label"><span>RUN PROFILE</span><i>LIVE</i></div>
+                <div class="profile-score" id="menu-best-score">000000</div>
+                <div class="profile-label">MEJOR PUNTUACIÓN</div>
+                <div class="profile-stats">
+                  <div><span>VEL. MÁX.</span><b id="menu-best-speed">0 <i>KM/H</i></b></div>
+                  <div><span>DISTANCIA</span><b id="menu-best-distance">0 <i>KM</i></b></div>
+                </div>
+              </div>
+
+              <div class="aside-panel aside-panel--city">
+                <div class="panel-label"><span>CITY GRID</span><i class="blink">●</i></div>
+                <div class="city-lines" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b></div>
+                <div class="city-meta"><span>SECTOR 07 / NIGHT SHIFT</span><span>22:48</span></div>
+              </div>
+
+              <div class="aside-controls">
+                <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> CONDUCIR</span>
+                <span><kbd>SHIFT</kbd> NITRO <kbd>C</kbd> CÁMARA <kbd>ESC</kbd> PAUSA</span>
+              </div>
+            </aside>
+          </div>
+
+          <footer class="menu-footer">
+            <span>NEON PURSUIT <b>v0.1</b> — BUILD 2088.11</span>
+            <span class="menu-footer__mid">WEBGL2 / WEBGPU READY · PWA INSTALABLE</span>
+            <span>ORIGINAL IP · NO OFFICIAL AFFILIATION</span>
+          </footer>
+        </section>
+
+        <!-- ============ GARAGE ============ -->
+        <section id="garage" class="screen screen--overlay" aria-label="Garage">
+          <header class="overlay-header">
+            <button class="back-btn" data-close="garage">◂ VOLVER</button>
+            <div class="overlay-title"><span>VEHICLE BAY</span><h2>GARAGE</h2></div>
+            <div class="overlay-status"><i class="dot"></i> ARRASTRA PARA ORBITAR · RUEDA PARA ZOOM</div>
+          </header>
+
+          <div class="garage-layout">
+            <div class="garage-panel">
+              <div class="panel-label"><span>MOTO ACTIVA</span><i>01 / 02</i></div>
+              <h3 id="garage-bike-name">VX-9 RAPTOR</h3>
+              <p class="garage-class" id="garage-bike-class">SUPERBIKE // CLASE A</p>
+
+              <div class="bike-tabs" id="garage-bike-tabs">
+                <button class="bike-tab is-active" data-bike="raptor"><b>VX-9</b><span>RAPTOR</span></button>
+                <button class="bike-tab" data-bike="wraith"><b>KX-11</b><span>WRAITH</span></button>
+              </div>
+
+              <div class="stat-list" id="garage-stats">
+                <div class="stat"><span>VELOCIDAD</span><div class="stat__bar"><i data-stat="speed"></i></div><b data-statval="speed">8.4</b></div>
+                <div class="stat"><span>ACELERACIÓN</span><div class="stat__bar"><i data-stat="accel"></i></div><b data-statval="accel">8.8</b></div>
+                <div class="stat"><span>MANEJO</span><div class="stat__bar"><i data-stat="handling"></i></div><b data-statval="handling">8.1</b></div>
+                <div class="stat"><span>FRENADO</span><div class="stat__bar"><i data-stat="braking"></i></div><b data-statval="braking">8.0</b></div>
+              </div>
+
+              <div class="paint-row">
+                <span>PINTURA</span>
+                <div class="paint-swatches" id="paint-swatches">
+                  <button data-paint="#00F5FF" style="--swatch:#00F5FF" aria-label="Cian neón"></button>
+                  <button data-paint="#FF2CA8" style="--swatch:#FF2CA8" aria-label="Magenta"></button>
+                  <button data-paint="#8B5CFF" style="--swatch:#8B5CFF" aria-label="Violeta eléctrico"></button>
+                  <button data-paint="#FF8A36" style="--swatch:#FF8A36" aria-label="Naranja"></button>
+                  <button data-paint="#F3FBFF" style="--swatch:#F3FBFF" aria-label="Blanco frío"></button>
+                  <button data-paint="#1B2A38" style="--swatch:#1B2A38" aria-label="Grafito"></button>
+                </div>
+              </div>
+
+              <div class="garage-actions">
+                <button class="btn btn--primary btn--compact" id="garage-play"><span class="btn__label">JUGAR CON ESTA MOTO<small>ENTRAR A LA CIUDAD</small></span><span class="btn__arrow">▸</span></button>
+              </div>
+            </div>
+
+            <div class="garage-view-hint"><span>◉</span> VISTA 3D EN TIEMPO REAL</div>
+          </div>
+
+          <footer class="overlay-footer"><span id="garage-paint-label">PINTURA: CIAN NEÓN</span><span>MODELOS PROCEDURALES ORIGINALES · LISTOS PARA GLB</span></footer>
+        </section>
+
+        <!-- ============ SETTINGS ============ -->
+        <section id="settings" class="screen screen--overlay" aria-label="Configuración">
+          <header class="overlay-header">
+            <button class="back-btn" data-close="settings">◂ VOLVER</button>
+            <div class="overlay-title"><span>SYSTEM CONFIG</span><h2>CONFIGURACIÓN</h2></div>
+            <div class="overlay-status"><i class="dot"></i> LOS CAMBIOS SE APLICAN AL INSTANTE</div>
+          </header>
+
+          <div class="settings-layout">
+            <div class="settings-panel">
+              <div class="settings-section">
+                <div class="panel-label"><span>GRÁFICOS</span><i>RENDER</i></div>
+                <label class="setting-row">
+                  <span>PERFIL DE CALIDAD<small>Ajusta sombras, partículas y distancia de dibujado</small></span>
+                  <select id="set-quality">
+                    <option value="auto">AUTO / ADAPTATIVO</option>
+                    <option value="low">BAJO — MÓVIL</option>
+                    <option value="medium">MEDIO</option>
+                    <option value="high">ALTO</option>
+                    <option value="ultra">ULTRA</option>
+                  </select>
+                </label>
+                <label class="setting-row">
+                  <span>RESOLUCIÓN<small>Escala de renderizado (rendimiento)</small></span>
+                  <input type="range" id="set-resolution" min="50" max="100" step="5" value="100" />
+                  <b id="set-resolution-value">100%</b>
+                </label>
+                <label class="setting-row">
+                  <span>DENSIDAD DE TRÁFICO<small>Vehículos civiles en circulación</small></span>
+                  <select id="set-traffic">
+                    <option value="low">BAJA</option>
+                    <option value="medium">MEDIA</option>
+                    <option value="high">ALTA</option>
+                  </select>
+                </label>
+                <label class="setting-row setting-row--toggle">
+                  <span>MOTION BLUR Y BLOOM<small>Efectos cinematográficos</small></span>
+                  <input type="checkbox" id="set-postfx" checked />
+                </label>
+              </div>
+
+              <div class="settings-section">
+                <div class="panel-label"><span>AUDIO</span><i>WEB AUDIO</i></div>
+                <label class="setting-row">
+                  <span>VOLUMEN GENERAL<small>Master</small></span>
+                  <input type="range" id="set-master" min="0" max="100" step="1" value="80" />
+                  <b id="set-master-value">80%</b>
+                </label>
+                <label class="setting-row">
+                  <span>MOTOR Y EFECTOS<small>Motor, viento, impactos, sirenas</small></span>
+                  <input type="range" id="set-sfx" min="0" max="100" step="1" value="85" />
+                  <b id="set-sfx-value">85%</b>
+                </label>
+                <label class="setting-row">
+                  <span>MÚSICA<small>Secuencia electrónica original</small></span>
+                  <input type="range" id="set-music" min="0" max="100" step="1" value="55" />
+                  <b id="set-music-value">55%</b>
+                </label>
+              </div>
+
+              <div class="settings-section">
+                <div class="panel-label"><span>CONTROLES Y CÁMARA</span><i>INPUT</i></div>
+                <label class="setting-row">
+                  <span>CÁMARA INICIAL<small>Perspectiva al iniciar partida</small></span>
+                  <select id="set-camera">
+                    <option value="chase">TRASERA</option>
+                    <option value="close">CERCANA</option>
+                    <option value="first">PRIMERA PERSONA</option>
+                  </select>
+                </label>
+                <label class="setting-row setting-row--toggle">
+                  <span>CONTROLES TÁCTILES<small>Mostrar en pantallas táctiles</small></span>
+                  <input type="checkbox" id="set-touch" checked />
+                </label>
+                <label class="setting-row setting-row--toggle">
+                  <span>VIBRACIÓN<small>Respuesta háptica en móviles compatibles</small></span>
+                  <input type="checkbox" id="set-haptics" checked />
+                </label>
+                <div class="settings-backend">
+                  <span>BACKEND GRÁFICO</span><b id="settings-backend">DETECTANDO…</b>
+                  <span>VERSIÓN</span><b id="settings-version">—</b>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-side">
+              <div class="settings-info">
+                <h4>CONTROLES</h4>
+                <div class="keymap">
+                  <div><kbd>W</kbd><kbd>↑</kbd><span>Acelerar</span></div>
+                  <div><kbd>S</kbd><kbd>↓</kbd><span>Frenar</span></div>
+                  <div><kbd>A</kbd><kbd>D</kbd><span>Girar</span></div>
+                  <div><kbd>ESPACIO</kbd><span>Derrape</span></div>
+                  <div><kbd>SHIFT</kbd><span>Nitro</span></div>
+                  <div><kbd>C</kbd><span>Cámara</span></div>
+                  <div><kbd>ESC</kbd><span>Pausa</span></div>
+                </div>
+                <p>En móvil: joystick izquierdo + botones de acelerador, freno, nitro y derrape. Se pueden usar varios dedos a la vez.</p>
+              </div>
+              <button class="btn btn--compact" id="settings-reset"><span class="btn__label">RESTABLECER AJUSTES<small>VALORES POR DEFECTO</small></span></button>
+            </div>
+          </div>
+          <footer class="overlay-footer"><span>AJUSTES GUARDADOS EN ESTE DISPOSITIVO</span><span>PWA · SERVICE WORKER · OFFLINE READY</span></footer>
+        </section>
+
+        <!-- ============ ABOUT ============ -->
+        <section id="about" class="screen screen--overlay" aria-label="Acerca del juego">
+          <header class="overlay-header">
+            <button class="back-btn" data-close="about">◂ VOLVER</button>
+            <div class="overlay-title"><span>INTEL FILE</span><h2>ACERCA DEL JUEGO</h2></div>
+            <div class="overlay-status"><i class="dot"></i> ORIGINAL IP — NO AFILIACIÓN OFICIAL</div>
+          </header>
+          <div class="about-layout">
+            <div class="about-main">
+              <h3>NEON PURSUIT</h3>
+              <p class="about-lead">Un simulador arcade de conducción de superbikes en una megaciudad nocturna. Atraviesa autopistas, túneles y puentes mientras la policía cierra el cerco. Tu única salida es la velocidad.</p>
+              <p>Proyecto original construido con geometría 3D procedural, Babylon.js, TypeScript, Web Audio API y Vite. Todos los edificios, vehículos, motocicletas, letreros y sonidos se generan en tiempo de ejecución: no depende de recursos externos que puedan desaparecer.</p>
+              <div class="about-columns">
+                <div>
+                  <h4>TECNOLOGÍA</h4>
+                  <ul>
+                    <li>Babylon.js 9 · WebGL2 / WebGPU</li>
+                    <li>TypeScript estricto + Vite</li>
+                    <li>Controlador físico propio a delta time fijo</li>
+                    <li>Audio sintetizado con Web Audio API</li>
+                    <li>PWA instalable con Service Worker</li>
+                    <li>Geometría instanciada y fusionada</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4>CONTENIDO ORIGINAL</h4>
+                  <ul>
+                    <li>Ciudad procedural de ~6 km</li>
+                    <li>Dos superbikes con estadísticas reales</li>
+                    <li>Tráfico civil con IA de carril</li>
+                    <li>Persecución policial de 5 niveles</li>
+                    <li>Helicóptero de vigilancia</li>
+                    <li>Música electrónica generativa</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="about-note">
+                <b>Nota técnica:</b> esta primera versión usa un controlador cinemático estable en lugar de una simulación rígida completa. La arquitectura deja preparada la sustitución de modelos procedurales por GLB y la integración de físicas avanzadas (Havok / Physics V2) sin reescribir el juego.
+              </div>
+            </div>
+            <aside class="about-side">
+              <div class="about-card">
+                <span>BUILD</span><b>0.1.0 / 2088.11</b>
+                <span>MOTOR</span><b>BABYLON.JS</b>
+                <span>RUTA</span><b>6.2 KM LOOP</b>
+                <span>DIFICULTAD</span><b>ADAPTATIVA</b>
+              </div>
+              <div class="about-card about-card--warn">
+                <b>SEGURIDAD VIAL</b>
+                <p>NEON PURSUIT es ficción. No conduzcas de forma temeraria en la vida real. Respeta las normas de tráfico y a los demás.</p>
+              </div>
+            </aside>
+          </div>
+          <footer class="overlay-footer"><span>HECHO CON HTML5 · CSS3 · TYPESCRIPT · BABYLON.JS</span><span>© 2088 NEON PURSUIT — PROYECTO ORIGINAL</span></footer>
+        </section>
+
+        <!-- ============ HUD ============ -->
+        <div id="hud" class="hud" aria-live="off">
+          <div class="hud-topleft">
+            <div class="hud-stat"><span>PUNTUACIÓN</span><b id="hud-score">0</b></div>
+            <div class="hud-stat hud-stat--small"><span>TIEMPO</span><b id="hud-time">00:00</b></div>
+            <div class="hud-stat hud-stat--small"><span>DISTANCIA</span><b id="hud-distance">0.00 KM</b></div>
+          </div>
+
+          <div class="pursuit-panel" id="pursuit-panel">
+            <div class="pursuit-head"><span>NIVEL DE PERSECUCIÓN</span><b id="wanted-label">LIBRE</b></div>
+            <div class="wanted-bars" id="wanted-bars"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="pursuit-meta"><span id="pursuit-state">SIN UNIDADES</span><span id="pursuit-distance">— M</span></div>
+          </div>
+
+          <div class="minimap-wrap">
+            <div class="minimap-head"><span>GRID // S07</span><b id="minimap-zoom">1.0×</b></div>
+            <svg id="minimap" viewBox="0 0 200 200" aria-label="Minimapa de la ciudad">
+              <defs>
+                <filter id="glowmap"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <path id="minimap-track" d="" fill="none" stroke="#0d3c4d" stroke-width="7" stroke-linejoin="round" />
+              <path id="minimap-track-line" d="" fill="none" stroke="#00f5ff" stroke-width="1.4" stroke-linejoin="round" opacity=".75" />
+              <g id="minimap-police"></g>
+              <circle id="minimap-player" cx="100" cy="100" r="3.2" fill="#f3fbff" filter="url(#glowmap)" />
+              <circle id="minimap-helo" cx="100" cy="100" r="2.4" fill="#ff2ca8" opacity="0" />
+            </svg>
+          </div>
+
+          <div class="hud-bottomleft">
+            <div class="damage-block">
+              <div class="damage-head"><span>INTEGRIDAD</span><b id="hud-damage-label">100%</b></div>
+              <div class="damage-bar"><i id="hud-damage-bar"></i></div>
+            </div>
+            <div class="drift-indicator" id="drift-indicator">DRIFT</div>
+            <div class="hud-hint" id="hud-hint"><kbd>W</kbd> ACELERAR · <kbd>A</kbd><kbd>D</kbd> GIRAR · <kbd>SHIFT</kbd> NITRO · <kbd>C</kbd> CÁMARA</div>
+          </div>
+
+          <div class="speedo">
+            <svg class="speedo-arc" viewBox="0 0 220 220" aria-hidden="true">
+              <circle class="speedo-arc__bg" cx="110" cy="110" r="88" />
+              <circle id="rpm-arc" class="speedo-arc__rpm" cx="110" cy="110" r="88" />
+              <circle class="speedo-arc__inner" cx="110" cy="110" r="72" />
+            </svg>
+            <div class="speedo-readout">
+              <div class="speedo-speed"><b id="hud-speed">0</b><span>KM/H</span></div>
+              <div class="speedo-gear">MARCHA <b id="hud-gear">N</b></div>
+              <div class="rpm-label"><span>RPM</span><b id="hud-rpm">1.2</b><i>K</i></div>
+            </div>
+            <div class="speedo-badge" id="camera-badge">CAM · TRASERA</div>
+          </div>
+
+          <div class="nitro-block">
+            <div class="nitro-head"><span>NITRO</span><b id="nitro-percent">100%</b></div>
+            <div class="nitro-bar"><i id="nitro-bar"></i><em></em><em></em><em></em><em></em></div>
+            <div class="nitro-status" id="nitro-status">LISTO</div>
+          </div>
+
+          <div class="hud-topright">
+            <button class="hud-btn" id="btn-camera" title="Cambiar cámara (C)" aria-label="Cambiar cámara">◉</button>
+            <button class="hud-btn" id="btn-pause" title="Pausa (Esc)" aria-label="Pausar">Ⅱ</button>
+          </div>
+
+          <div class="center-message" id="center-message"></div>
+          <div class="event-feed" id="event-feed"></div>
+          <div class="speed-value" id="speed-value"></div>
+        </div>
+
+        <!-- ============ TOUCH CONTROLS ============ -->
+        <div id="touch-controls" class="touch-controls" aria-hidden="true">
+          <div class="touch-top-actions">
+            <button class="touch-chip" data-touch="camera" aria-label="Cambiar cámara">CAM</button>
+            <button class="touch-chip" data-touch="pause" aria-label="Pausar">Ⅱ</button>
+          </div>
+          <div class="joystick-zone" id="joystick-zone">
+            <div class="joystick-base" id="joystick-base">
+              <div class="joystick-ticks" aria-hidden="true"></div>
+              <div class="joystick-knob" id="joystick-knob"></div>
+            </div>
+            <span class="touch-label">DIRECCIÓN</span>
+          </div>
+          <div class="touch-actions">
+            <button class="touch-btn touch-btn--small" data-touch="drift" aria-label="Derrapar">DRIFT</button>
+            <button class="touch-btn touch-btn--small" data-touch="nitro" aria-label="Nitro">NITRO</button>
+            <button class="touch-btn touch-btn--brake" data-touch="brake" aria-label="Frenar">FRENO</button>
+            <button class="touch-btn touch-btn--throttle" data-touch="throttle" aria-label="Acelerar">ACELERAR</button>
+          </div>
+        </div>
+
+        <div id="rotate-notice" class="rotate-notice">↻ GIRA EL DISPOSITIVO PARA UNA EXPERIENCIA COMPLETA</div>
+
+        <!-- ============ PAUSE ============ -->
+        <section id="pause-menu" class="screen screen--modal" aria-label="Pausa">
+          <div class="modal-card">
+            <div class="modal-kicker">SESSION SUSPENDED</div>
+            <h2 class="modal-title">PAUSA</h2>
+            <div class="pause-stats">
+              <div><span>PUNTUACIÓN</span><b id="pause-score">0</b></div>
+              <div><span>VELOCIDAD MÁX.</span><b id="pause-speed">0 <i>KM/H</i></b></div>
+              <div><span>DISTANCIA</span><b id="pause-distance">0.0 <i>KM</i></b></div>
+            </div>
+            <div class="modal-actions">
+              <button class="btn btn--primary" data-pause-action="resume"><span class="btn__label">REANUDAR<small>VOLVER A LA CARRERA</small></span><span class="btn__arrow">▸</span></button>
+              <button class="btn" data-pause-action="restart"><span class="btn__label">REINICIAR<small>NUEVA SESIÓN</small></span><span class="btn__arrow">▸</span></button>
+              <button class="btn" data-pause-action="settings"><span class="btn__label">CONFIGURACIÓN<small>GRÁFICOS Y AUDIO</small></span><span class="btn__arrow">▸</span></button>
+              <button class="btn" data-pause-action="quit"><span class="btn__label">SALIR AL MENÚ<small>TERMINAR SESIÓN</small></span><span class="btn__arrow">▸</span></button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ GAME OVER ============ -->
+        <section id="game-over" class="screen screen--modal" aria-label="Fin de la partida">
+          <div class="modal-card modal-card--wide">
+            <div class="modal-kicker" id="gameover-kicker">PURSUIT TERMINATED</div>
+            <h2 class="modal-title" id="gameover-title">DETENIDO</h2>
+            <p class="modal-sub" id="gameover-sub">La policía te ha bloqueado. La ciudad nunca duerme.</p>
+            <div class="result-grid">
+              <div><span>PUNTUACIÓN</span><b id="result-score">0</b></div>
+              <div><span>DISTANCIA</span><b id="result-distance">0.0 <i>KM</i></b></div>
+              <div><span>VELOCIDAD MÁX.</span><b id="result-speed">0 <i>KM/H</i></b></div>
+              <div><span>TIEMPO</span><b id="result-time">00:00</b></div>
+              <div><span>NIVEL MÁX.</span><b id="result-wanted">0</b></div>
+              <div><span>MEJOR PUNTUACIÓN</span><b id="result-best">0</b></div>
+            </div>
+            <div class="modal-actions modal-actions--row">
+              <button class="btn btn--primary" data-over-action="restart"><span class="btn__label">REINTENTAR<small>VOLVER A LA CIUDAD</small></span><span class="btn__arrow">▸</span></button>
+              <button class="btn" data-over-action="menu"><span class="btn__label">MENÚ PRINCIPAL<small>VOLVER AL GARAGE</small></span><span class="btn__arrow">▸</span></button>
+            </div>
+          </div>
+        </section>
+
+        <div id="toast" class="toast" role="status"></div>
+      </div>
+    </div>
+  </body>
+</html>
